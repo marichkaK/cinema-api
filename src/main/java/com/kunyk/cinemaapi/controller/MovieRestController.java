@@ -5,6 +5,7 @@ import com.kunyk.cinemaapi.dto.MovieModelDto;
 import com.kunyk.cinemaapi.model.Movie;
 import com.kunyk.cinemaapi.service.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,22 +23,23 @@ public class MovieRestController {
     }
 
     @GetMapping
-    public List<MovieDto> getMovies() {
+    public ResponseEntity<?> getMovies() {
         List<Movie> movies = movieService.findAllMovies();
-        return movies.stream()
+        List<MovieDto> dtos = movies.stream()
                 .map(Movie::toDto)
                 .collect(Collectors.toList());
+        return ResponseEntity.ok(dtos);
     }
 
     @GetMapping("/{id}")
-    public MovieModelDto getMovie(@PathVariable Long id) {
-        return movieService.getMovie(id).toMovieDto();
+    public ResponseEntity<?> getMovie(@PathVariable Long id) {
+        MovieModelDto dto = movieService.getMovie(id).toMovieDto();
+        return ResponseEntity.ok(dto);
     }
 
     @PostMapping
-    public MovieModelDto createMovie(@RequestBody MovieModelDto movieDto) {
+    public ResponseEntity<?> createMovie(@RequestBody MovieModelDto movieDto) {
         Movie movie = movieService.createMovie(movieDto);
-
-        return movie.toMovieDto();
+        return ResponseEntity.status(201).body(movie.toMovieDto());
     }
 }

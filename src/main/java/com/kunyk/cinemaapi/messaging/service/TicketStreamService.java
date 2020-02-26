@@ -19,10 +19,7 @@ public class TicketStreamService {
     }
 
     public boolean sendTicket(Ticket ticket) {
-        TicketKafkaDto dto = TicketKafkaDto.builder()
-                .ticketId(ticket.getId())
-                .movieSessionPlaceDataKafkaDto(ticket.getMovieSessionPlaceData().toKafkaDto())
-                .build();
+        TicketKafkaDto dto = ticket.toKafkaDto();
 
         MessageChannel messageChannel = ticketStream.writeTickets();
 

@@ -40,9 +40,19 @@ public class Ticket {
     }
 
     public TicketKafkaDto toKafkaDto() {
-        return TicketKafkaDto.builder()
-                .ticketId(id)
-                .movieSessionPlaceDataKafkaDto(movieSessionPlaceData.toKafkaDto())
-                .build();
+        TicketKafkaDto ticketKafkaDto;
+        if (this.user != null) {
+            ticketKafkaDto = TicketKafkaDto.builder()
+                    .ticketId(id)
+                    .user(user.toKafkaDto())
+                    .movieSessionPlaceDataKafkaDto(movieSessionPlaceData.toKafkaDto())
+                    .build();
+        } else {
+            ticketKafkaDto = TicketKafkaDto.builder()
+                    .ticketId(id)
+                    .movieSessionPlaceDataKafkaDto(movieSessionPlaceData.toKafkaDto())
+                    .build();
+        }
+        return ticketKafkaDto;
     }
 }
